@@ -1,15 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:food_admin/core/constantes/constantes.dart';
 import 'package:food_admin/features/main_components/widgets/custom_appbar.dart';
+
+import '../Widgets/custom_categori_field.dart';
 
 class AddCategoriesPage extends StatelessWidget {
   const AddCategoriesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppbar(
+    final size = MediaQuery.of(context).size;
+    return Scaffold(
+      appBar: const CustomAppbar(
         icono: Icons.arrow_back_ios_new,
         title: "Agregar nueva Categoria",
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const CustomNamedCategorField(),
+              SizedBox(
+                height: size.height * 0.1,
+              ),
+              GestureDetector(
+                onTap: () {
+                  //Implementar subir la imagen o capturarla con la camara
+                },
+                child: Container(
+                  height: size.height * 0.3,
+                  width: size.width * 0.6,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/no_image.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.1,
+              ),
+              SizedBox(
+                width: size.width * 0.9,
+                child: MaterialButton(
+                  color: kprymaricolor,
+                  height: size.height * 0.08,
+                  onPressed: () {},
+                  child: Center(
+                      child: Text(
+                    "Save",
+                    style: TextStyle(
+                        fontSize: size.height * 0.03, color: Colors.white),
+                  )),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
