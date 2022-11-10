@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/util/size_util.dart';
 import '../widgets/custom_buttom.dart';
 import '../widgets/custom_picture_container.dart';
 import '../widgets/login_center_container.dart';
@@ -9,6 +10,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
