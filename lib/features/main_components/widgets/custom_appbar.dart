@@ -63,7 +63,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     Size dimesion;
 
     toolbar == true
-        ? dimesion = const Size.fromHeight(kToolbarHeight * 2.1)
+        ? dimesion = const Size.fromHeight(kToolbarHeight * 1.8)
         : dimesion = const Size.fromHeight(kToolbarHeight);
 
     return dimesion;
