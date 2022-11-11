@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constantes/constantes.dart';
-import '../../../categories/presentation/pages/home_categories_page.dart';
+import '../../../main_components/pages/control_page.dart';
 
 class CustomLoginButtom extends StatelessWidget {
   const CustomLoginButtom({
@@ -22,10 +22,8 @@ class CustomLoginButtom extends StatelessWidget {
         color: kprymaricolor,
         onPressed: () {
           //navegar con creacion de ruta
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const HomeCategoriesPage()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const ControlPage()));
         },
         child: Center(
           child: Text(
