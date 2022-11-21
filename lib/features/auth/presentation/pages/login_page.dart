@@ -13,7 +13,8 @@ class LoginPage extends StatelessWidget {
     SizeConfig().init(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
+      body: SingleChildScrollView(
+          child: Container(
         height: size.height,
         width: size.width,
         decoration: const BoxDecoration(
@@ -24,25 +25,18 @@ class LoginPage extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-          child: Stack(
+          child: Column(
             children: [
-              Positioned(
-                right: size.width * 0.0001,
-                top: size.height * 0.13,
-                child: const CustomPictureContainer(),
-              ),
-              Positioned(
-                top: size.height * 0.48,
-                child: const LoginCenterContainer(),
-              ),
-              Positioned(
-                bottom: size.height * 0.08,
-                child: const CustomLoginButtom(),
-              ),
+              SizedBox(height: size.height * 0.1),
+              const CustomPictureContainer(),
+              SizedBox(height: size.height * 0.04),
+              const LoginCenterContainer(),
+              SizedBox(height: size.height * 0.05),
+              const CustomLoginButtom(),
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }
