@@ -19,40 +19,53 @@ class CustomLoginTextfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(size.height * 0.01),
-        border: Border.all(color: Colors.grey.withOpacity(0.5)),
-      ),
-      height: size.height * 0.1,
-      width: size.width * 0.8,
-      //  color: Colors.blue[50],
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(size.height * 0.01),
+            //  border: Border.all(color: Colors.grey.withOpacity(0.5)),
+          ),
+          height: size.height * 0.1,
+          width: size.width * 0.8,
+          //  color: Colors.blue[50],
 
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-        child: TextFormField(
-          style: TextStyle(
-              color: kprymaricolor,
-              fontWeight: FontWeight.bold,
-              fontSize: size.height * 0.02),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 0),
+            child: TextFormField(
+              style: TextStyle(
+                  color: kprymaricolor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: size.height * 0.02),
 
-          //mostrar validacion arriba del campo
+              //mostrar validacion arriba del campo
 
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
 
-          validator: validator,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            //hacer el campo de texto curvo
+              validator: validator,
+              onChanged: onChanged,
+              decoration: InputDecoration(
+                //hacer el campo de texto curvo
 
-            //  contentPadding: EdgeInsets.symmetric(vertical: size.height * 0.01),
-            prefixIcon: Icon(icon, color: kprymaricolor),
-            hintText: hintext,
-            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
+                //  contentPadding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+                // prefixIcon: Icon(icon, color: kprymaricolor),
+                hintText: hintext,
+                hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
+              ),
+            ),
           ),
         ),
-      ),
+        Positioned(
+          left: size.width * 0.04,
+          top: size.height * 0.03,
+          child: Icon(
+            icon,
+            color: kprymaricolor,
+            size: size.height * 0.035,
+          ),
+        ),
+      ],
     );
   }
 }

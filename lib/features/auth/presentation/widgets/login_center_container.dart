@@ -44,6 +44,9 @@ class LoginCenterContainer extends StatelessWidget {
                       fontSize: size.height * 0.03),
                 )),
               ),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
               CustomLoginTextfield(
                 hintext: "Email Id",
                 icon: Icons.email,
@@ -53,9 +56,6 @@ class LoginCenterContainer extends StatelessWidget {
                 validator: (value) {
                   return validateEmail(value);
                 },
-              ),
-              SizedBox(
-                height: size.height * 0.01,
               ),
               CustomLoginTextfield(
                 onChanged: (value) {
