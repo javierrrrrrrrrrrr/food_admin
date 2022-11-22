@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:food_admin/core/constantes/constantes.dart';
 import 'package:food_admin/features/categories/presentation/pages/home_categories_page.dart';
 import 'package:food_admin/features/main_components/widgets/custom_appbar.dart';
+import 'package:provider/provider.dart';
 
 import '../../orders/presentation/pages/home_orders_page.dart';
+import '../../products/presentation/Providers/products_provider.dart';
+import '../../products/presentation/pages/home_product_page.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/option_menu_container.dart';
 
@@ -12,6 +16,7 @@ class ControlPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final productProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
       drawer: const CustomDrawer(),
       appBar: const CustomAppbar(
@@ -39,7 +44,28 @@ class ControlPage extends StatelessWidget {
             ),
             Row(
               children: [
-                const OptionMenuContainer(
+                OptionMenuContainer(
+                  onPressed: (() async {
+                    loadingSpinner(context);
+                    bool respuesta = await productProvider.getProducts();
+
+                    if (respuesta == true) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeProductsPage()));
+                    } else {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("ERROR"),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }),
                   name: "Productos",
                   bigicon: Icons.production_quantity_limits,
                   color: Colors.blue,

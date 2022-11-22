@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:food_admin/features/products/data/models/product_model.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../core/constantes/constantes.dart';
+import '../../../products/presentation/Providers/products_provider.dart';
 
 class ListElementContainer extends StatelessWidget {
   const ListElementContainer({
     Key? key,
-    required this.index,
+    required this.product,
+    this.isproduct,
   }) : super(key: key);
 
-  final String index;
+  final Product product;
+  final isproduct;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final productProvider = Provider.of<ProductProvider>(context);
     return Container(
       height: size.height * 0.1,
       width: size.width,
@@ -24,7 +32,38 @@ class ListElementContainer extends StatelessWidget {
             closeThreshold: 0.8,
             children: [
               SlidableAction(
-                onPressed: ((context) {}),
+                onPressed: ((context) async {
+                  if (isproduct == true) {
+                    //falta un cartel de confirmacion
+                    loadingSpinner(productProvider.scaffoldKey.currentContext!);
+                    bool resp = await productProvider.deleteProduct(product);
+                    if (resp == true) {
+                      Navigator.pop(
+                          productProvider.scaffoldKey.currentContext!);
+                      ScaffoldMessenger.of(
+                              productProvider.scaffoldKey.currentContext!)
+                          .showSnackBar(
+                        const SnackBar(
+                          content: Text("Producto Eliminado"),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    } else {
+                      Navigator.pop(
+                          productProvider.scaffoldKey.currentContext!);
+                      ScaffoldMessenger.of(
+                              productProvider.scaffoldKey.currentContext!)
+                          .showSnackBar(
+                        const SnackBar(
+                          content: Text("Error al Eliminar"),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    }
+                  }
+                }),
                 icon: Icons.delete,
                 label: "Eliminar",
                 spacing: 1,
@@ -48,23 +87,32 @@ class ListElementContainer extends StatelessWidget {
               Container(
                 width: size.width * 0.03,
               ),
-              Container(
+              SizedBox(
                 height: size.height * 0.06,
                 width: size.width * 0.16,
-                decoration: BoxDecoration(
-                  //color: Colors.black,
-                  //borderRadius: BorderRadius.circular(size.height * 0.1),
-                  image: DecorationImage(
-                    image: AssetImage("assets/recurso$index.png"),
-                    fit: BoxFit.fill,
-                  ),
-                ),
+                child: product.image == 'no-image.png'
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(size.width * 0.02),
+                        ),
+                        child: Image.asset(
+                          'assets/no_image.jpeg',
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : FadeInImage(
+                        fit: BoxFit.fill,
+                        placeholder: const AssetImage('assets/loading.gif'),
+                        image: NetworkImage(
+                          '${apiUrl}uploads/products/${product.id}',
+                        ),
+                      ),
               ),
               SizedBox(
                 width: size.width * 0.05,
               ),
               Text(
-                "Helados",
+                product.name,
                 style: TextStyle(fontSize: size.height * 0.028),
               ),
               Container(

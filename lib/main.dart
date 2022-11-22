@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:food_admin/core/constantes/constantes.dart';
-import 'package:food_admin/features/auth/presentation/pages/login_page.dart';
+import 'package:food_admin/features/main_components/pages/control_page.dart';
 import 'package:food_admin/features/products/presentation/Providers/up_image_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'features/auth/presentation/Providers/login_provider.dart';
+import 'features/products/presentation/Providers/products_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,9 @@ void main() {
     ),
     ChangeNotifierProvider(
       create: (_) => LoginProvider(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => ProductProvider(),
     ),
   ], child: const MyApp()));
 }
@@ -37,7 +41,7 @@ class MyApp extends StatelessWidget {
       ),
       //color orange
 
-      home: const LoginPage(),
+      home: const ControlPage(),
     );
   }
 }
