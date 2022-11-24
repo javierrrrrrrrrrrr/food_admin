@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_admin/core/constantes/constantes.dart';
+import 'package:food_admin/features/categories/presentation/Provider/category_provider.dart';
 import 'package:food_admin/features/categories/presentation/pages/home_categories_page.dart';
 import 'package:food_admin/features/main_components/widgets/custom_appbar.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class ControlPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final productProvider = Provider.of<ProductProvider>(context);
+    final categoriesProvider = Provider.of<CategoryProvider>(context);
     return Scaffold(
       drawer: const CustomDrawer(),
       appBar: const CustomAppbar(
@@ -74,11 +76,27 @@ class ControlPage extends StatelessWidget {
                   width: size.width * 0.05,
                 ),
                 OptionMenuContainer(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeCategoriesPage()));
+                  onPressed: () async {
+                    loadingSpinner(context);
+                    bool respuesta = await categoriesProvider.getCategories();
+
+                    if (respuesta == true) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const HomeCategoriesPage()));
+                    } else {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("ERROR"),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   },
                   name: "Categorias",
                   bigicon: Icons.auto_awesome_motion_outlined,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:food_admin/features/categories/data/models/category_model.dart';
+import 'package:food_admin/features/categories/presentation/Provider/category_provider.dart';
 import 'package:food_admin/features/products/data/models/product_model.dart';
 import 'package:provider/provider.dart';
 
@@ -9,17 +11,20 @@ import '../../../products/presentation/Providers/products_provider.dart';
 class ListElementContainer extends StatelessWidget {
   const ListElementContainer({
     Key? key,
-    required this.product,
+    this.product,
     this.isproduct,
+    this.category,
   }) : super(key: key);
 
-  final Product product;
+  final Product? product;
+  final Category? category;
   final isproduct;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final productProvider = Provider.of<ProductProvider>(context);
+    final categoryProvider = Provider.of<CategoryProvider>(context);
     return Container(
       height: size.height * 0.1,
       width: size.width,
@@ -36,7 +41,7 @@ class ListElementContainer extends StatelessWidget {
                   if (isproduct == true) {
                     //falta un cartel de confirmacion
                     loadingSpinner(productProvider.scaffoldKey.currentContext!);
-                    bool resp = await productProvider.deleteProduct(product);
+                    bool resp = await productProvider.deleteProduct(product!);
                     if (resp == true) {
                       Navigator.pop(
                           productProvider.scaffoldKey.currentContext!);
@@ -62,6 +67,40 @@ class ListElementContainer extends StatelessWidget {
                         ),
                       );
                     }
+                  } else {
+                    //eliminar categoria
+                    loadingSpinner(
+                        categoryProvider.scaffoldKey.currentContext!);
+                    bool resp =
+                        await categoryProvider.deleteCategories(category!);
+                    if (resp == true) {
+                      Navigator.pop(
+                          categoryProvider.scaffoldKey.currentContext!);
+                      ScaffoldMessenger.of(
+                              categoryProvider.scaffoldKey.currentContext!)
+                          .showSnackBar(
+                        const SnackBar(
+                          content: Text("Producto Eliminado"),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    } else {
+                      Navigator.pop(
+                          categoryProvider.scaffoldKey.currentContext!);
+                      ScaffoldMessenger.of(
+                              categoryProvider.scaffoldKey.currentContext!)
+                          .showSnackBar(
+                        const SnackBar(
+                          content: Text("Error al Eliminar"),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    }
+
+                    ///
+
                   }
                 }),
                 icon: Icons.delete,
@@ -88,31 +127,58 @@ class ListElementContainer extends StatelessWidget {
                 width: size.width * 0.03,
               ),
               SizedBox(
-                height: size.height * 0.06,
-                width: size.width * 0.16,
-                child: product.image == 'no-image.png'
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(size.width * 0.02),
-                        ),
-                        child: Image.asset(
-                          'assets/no_image.jpeg',
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : FadeInImage(
-                        fit: BoxFit.fill,
-                        placeholder: const AssetImage('assets/loading.gif'),
-                        image: NetworkImage(
-                          '${apiUrl}uploads/products/${product.id}',
-                        ),
-                      ),
-              ),
+                  height: size.height * 0.06,
+                  width: size.width * 0.16,
+                  child: isproduct == true
+
+                      //si es producto
+                      ? product!.image == 'no-image.png'
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(size.width * 0.02),
+                              ),
+                              child: Image.asset(
+                                'assets/no_image.jpeg',
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : FadeInImage(
+                              fit: BoxFit.fill,
+                              placeholder:
+                                  const AssetImage('assets/loading.gif'),
+                              image: NetworkImage(
+                                '${apiUrl}uploads/products/${product!.id}',
+                              ))
+                      :
+                      // si es categoria
+                      //ADONYS TIENE QUE ARREEGLAR ESTO
+                      category!.image == 'no-image.png'
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(size.width * 0.02),
+                              ),
+                              child: Image.asset(
+                                'assets/no_image.jpeg',
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(size.width * 0.02),
+                              ),
+                              child: Image.asset(
+                                'assets/no_image.jpeg',
+                                fit: BoxFit.cover,
+                              ),
+                            )
+
+                  //
+                  ),
               SizedBox(
                 width: size.width * 0.05,
               ),
               Text(
-                product.name,
+                isproduct == true ? product!.name : category!.name,
                 style: TextStyle(fontSize: size.height * 0.028),
               ),
               Container(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_admin/features/categories/presentation/Provider/category_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../../main_components/widgets/category_or_products_body.dart';
 import '../../../main_components/widgets/custom_appbar.dart';
@@ -9,14 +11,16 @@ class HomeCategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final categoryProvider = Provider.of<CategoryProvider>(context);
 
-    return const Scaffold(
-      appBar: CustomAppbar(
+    return Scaffold(
+      key: categoryProvider.scaffoldKey,
+      appBar: const CustomAppbar(
         icono: Icons.sort,
         title: "Menu",
       ),
       body: ListProductsOrCategoryBody(
-        productlist: [],
+        categorieslist: categoryProvider.categorylist,
         buttomtext: "Ir a Productos",
         isproduct: false,
       ),

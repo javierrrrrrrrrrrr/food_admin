@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_admin/core/constantes/constantes.dart';
+import 'package:food_admin/features/categories/presentation/Provider/category_provider.dart';
 import 'package:food_admin/features/main_components/widgets/custom_appbar.dart';
 import 'package:food_admin/features/products/presentation/Providers/up_image_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+import '../../../categories/data/models/category_model.dart';
 import '../../../categories/presentation/pages/add_categorie_page.dart';
 
 class AddProduct extends StatelessWidget {
@@ -14,6 +16,7 @@ class AddProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final pruebaProvider = Provider.of<UPImageProvider>(context);
+
     return Scaffold(
       appBar: const CustomAppbar(
         icono: Icons.sort,
@@ -28,7 +31,7 @@ class AddProduct extends StatelessWidget {
               SizedBox(height: size.height * 0.03),
               const CustomToggleButtom(),
               const CustomField(hintext: "Nombre del Producto"),
-              const CustomField(hintext: "Categoria"),
+              const selectCategoriyWidget(),
               Row(
                 children: [
                   SizedBox(
@@ -71,6 +74,47 @@ class AddProduct extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class selectCategoriyWidget extends StatelessWidget {
+  const selectCategoriyWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final categoryProvider = Provider.of<CategoryProvider>(context);
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
+      child: Container(
+          height: size.height * 0.07,
+          width: size.width * 0.95,
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(size.height * 0.008),
+            border: Border.all(
+                color: Colors.grey, style: BorderStyle.solid, width: 0.80),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              hint: const Text("Seleccione una categoria"),
+              value: categoryProvider.selectedcategory,
+              items: categoryProvider.categorylist.map((Category value) {
+                return DropdownMenuItem<String>(
+                  value: value.name,
+                  child: Text(value.name),
+                );
+              }).toList(),
+              onChanged: (value) {
+                categoryProvider.changecategoryvalue(value!);
+              },
+            ),
+          )),
     );
   }
 }

@@ -7,9 +7,18 @@ import '../../../../core/constantes/constantes.dart';
 import 'package:http/http.dart' as http;
 
 class ProductProvider extends ChangeNotifier {
+  //llave del scaffold de la pagina de productos
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
+  //lista de productos
   List<Product> productsList = [];
+
+  //campos del formulario para agregar productos
+
+  String? productname;
+  
+  String productofertprice = "";
+  String productnominalprice = "";
+
 
   Future<bool> getProducts() async {
     var request = http.Request('GET', Uri.parse('${apiUrl}products/'));

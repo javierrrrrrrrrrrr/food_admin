@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../categories/data/models/category_model.dart';
+
 class Product extends Equatable {
   int id;
   String name;
@@ -48,39 +50,6 @@ class Product extends Equatable {
         price,
         image,
         category,
-        createdAt,
-        isDeleted,
-      ];
-}
-
-class Category extends Equatable {
-  int id;
-  String name;
-  String image;
-  String? createdAt;
-  bool? isDeleted;
-
-  Category({
-    required this.id,
-    required this.name,
-    required this.image,
-    this.createdAt,
-    this.isDeleted,
-  });
-
-  factory Category.fromMap(Map<String, dynamic> json) => Category(
-        id: json["id"],
-        name: json["name"],
-        image: json["image"],
-        createdAt: json["createdAt"],
-        isDeleted: json["isDeleted"],
-      );
-
-  @override
-  List<Object?> get props => [
-        id,
-        name,
-        image,
         createdAt,
         isDeleted,
       ];

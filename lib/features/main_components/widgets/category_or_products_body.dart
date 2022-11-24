@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:food_admin/features/categories/data/models/category_model.dart';
+import 'package:food_admin/features/categories/presentation/Provider/category_provider.dart';
+import 'package:provider/provider.dart';
 
+import '../../../core/constantes/constantes.dart';
 import '../../categories/presentation/Widgets/customa_add_buttom.dart';
 import '../../categories/presentation/Widgets/list_element_container.dart';
 import '../../categories/presentation/Widgets/separatedContainer.dart';
@@ -10,12 +14,14 @@ import '../../products/presentation/pages/add_produt_page.dart';
 class ListProductsOrCategoryBody extends StatelessWidget {
   const ListProductsOrCategoryBody({
     Key? key,
-    required this.productlist,
+    this.productlist,
     required this.buttomtext,
     required this.isproduct,
+    this.categorieslist,
   }) : super(key: key);
 
-  final List<Product> productlist;
+  final List<Product>? productlist;
+  final List<Category>? categorieslist;
   final String buttomtext;
 
   //saber si es producto o categoria
@@ -24,6 +30,7 @@ class ListProductsOrCategoryBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final categoryProvider = Provider.of<CategoryProvider>(context);
     return Column(
       children: [
         SizedBox(
@@ -31,7 +38,8 @@ class ListProductsOrCategoryBody extends StatelessWidget {
             width: size.width,
             // color: Colors.grey,
             child: CustomWidgetList(
-              produc: productlist,
+              produc: productlist ?? [],
+              categorieslist: categorieslist ?? [],
               isproduct: isproduct,
             )),
         Padding(
@@ -42,20 +50,32 @@ class ListProductsOrCategoryBody extends StatelessWidget {
               CustomAddButtom(
                   text: "Agregar Categoria",
                   onPressed: () {
-                    //navegar a la pagina de agregar categoria
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const AddCategoriesPage()));
+                    //navegar a la pagina de agregar categoria
                   }),
               CustomAddButtom(
                 text: buttomtext,
-                onPressed: () {
+                onPressed: () async {
+                  loadingSpinner(context);
+                  bool respuesta = await categoryProvider.getCategories();
+                  if (respuesta == true) {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddProduct()));
+                  } else {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Error al cargar las categorias"),
+                      ),
+                    );
+                  }
                   //naveg ar a la pagina de productos
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddProduct()));
                 },
               )
             ],
@@ -69,11 +89,13 @@ class ListProductsOrCategoryBody extends StatelessWidget {
 class CustomWidgetList extends StatelessWidget {
   const CustomWidgetList({
     Key? key,
-    required this.produc,
+    this.produc,
     required this.isproduct,
+    this.categorieslist,
   }) : super(key: key);
 
-  final List<Product> produc;
+  final List<Product>? produc;
+  final List<Category>? categorieslist;
   final bool isproduct;
 
   @override
@@ -84,15 +106,21 @@ class CustomWidgetList extends StatelessWidget {
           child: ListView.separated(
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
-                return ListElementContainer(
-                  product: produc[index],
-                  isproduct: isproduct,
-                );
+                return isproduct == true
+                    ? ListElementContainer(
+                        product: produc![index],
+                        isproduct: isproduct,
+                      )
+                    : ListElementContainer(
+                        category: categorieslist![index],
+                        isproduct: isproduct,
+                      );
               },
               separatorBuilder: (context, index) {
                 return const SeparatedContainer();
               },
-              itemCount: produc.length),
+              itemCount:
+                  isproduct == true ? produc!.length : categorieslist!.length),
         )
       ],
     );

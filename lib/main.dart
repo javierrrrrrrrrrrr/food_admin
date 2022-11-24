@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_admin/core/constantes/constantes.dart';
+import 'package:food_admin/features/categories/presentation/Provider/category_provider.dart';
 import 'package:food_admin/features/main_components/pages/control_page.dart';
 import 'package:food_admin/features/products/presentation/Providers/up_image_provider.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,9 @@ void main() {
     ),
     ChangeNotifierProvider(
       create: (_) => ProductProvider(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => CategoryProvider(),
     ),
   ], child: const MyApp()));
 }
