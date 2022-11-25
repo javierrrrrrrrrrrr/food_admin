@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_admin/features/categories/data/models/category_model.dart';
 import 'package:food_admin/features/categories/presentation/Provider/category_provider.dart';
+import 'package:food_admin/features/products/presentation/Providers/products_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constantes/constantes.dart';
@@ -9,6 +10,7 @@ import '../../categories/presentation/Widgets/list_element_container.dart';
 import '../../categories/presentation/Widgets/separatedContainer.dart';
 import '../../categories/presentation/pages/add_categorie_page.dart';
 import '../../products/data/models/product_model.dart';
+import '../../products/presentation/Providers/up_image_provider.dart';
 import '../../products/presentation/pages/add_produt_page.dart';
 
 class ListProductsOrCategoryBody extends StatelessWidget {
@@ -31,6 +33,8 @@ class ListProductsOrCategoryBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final categoryProvider = Provider.of<CategoryProvider>(context);
+    final imageProvider = Provider.of<UPImageProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
     return Column(
       children: [
         SizedBox(
@@ -60,6 +64,11 @@ class ListProductsOrCategoryBody extends StatelessWidget {
                 text: buttomtext,
                 onPressed: () async {
                   loadingSpinner(context);
+                  //setando valores
+                  imageProvider.pictureIsSelected = false;
+                  productProvider.selectedcategory = null;
+                  productProvider.rating = null;
+                  //
                   bool respuesta = await categoryProvider.getCategories();
                   if (respuesta == true) {
                     Navigator.pop(context);

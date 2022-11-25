@@ -20,10 +20,12 @@ class HomeProductsPage extends StatelessWidget {
         icono: Icons.sort,
         title: "Menu",
       ),
-      body: ListProductsOrCategoryBody(
-        productlist: productProvider.productsList,
-        buttomtext: "Agregar Producto",
-        isproduct: true,
+      body: SingleChildScrollView(
+        child: ListProductsOrCategoryBody(
+          productlist: productProvider.productsList,
+          buttomtext: "Agregar Producto",
+          isproduct: true,
+        ),
       ),
       //customAppBar(icono: Icons.sort, contex: context, title: "Menu"),
     );

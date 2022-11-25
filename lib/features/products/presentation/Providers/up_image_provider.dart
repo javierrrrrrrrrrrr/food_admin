@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../core/constantes/constantes.dart';
+
 class UPImageProvider extends ChangeNotifier {
   bool gallerySelectPicture = false;
   bool pictureIsSelected = false;
@@ -25,20 +27,21 @@ class UPImageProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> uploadImage() async {
+  Future<bool> uploadImage({required int id}) async {
     //circular progfress indicator
 
     var request = http.MultipartRequest(
-        'PUT', Uri.parse('http://66.94.96.169:3001/uploads/products/2'));
+        'PUT', Uri.parse('${apiUrl}uploads/products/$id'));
     request.files.add(await http.MultipartFile.fromPath(
         'archivo', image!.path)); //image es el file que se sube'));
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print("ok");
+      notifyListeners();
+      return true;
     } else {
-      print(response.reasonPhrase);
+      return false;
     }
   }
 }

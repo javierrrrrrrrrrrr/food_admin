@@ -10,6 +10,7 @@ class AddCategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: const CustomAppbar(
         icono: Icons.arrow_back_ios_new,
@@ -23,7 +24,9 @@ class AddCategoriesPage extends StatelessWidget {
               SizedBox(height: size.height * 0.1),
               const UploadContainer(),
               SizedBox(height: size.height * 0.1),
-              const CustomSaveButtom()
+              CustomSaveButtom(
+                onPressed: () {},
+              )
             ],
           ),
         ),

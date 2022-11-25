@@ -10,12 +10,7 @@ class CategoryProvider extends ChangeNotifier {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   //////
   List<Category> categorylist = [];
-  String? selectedcategory;
 
-  changecategoryvalue(String value) {
-    selectedcategory = value;
-    notifyListeners();
-  }
   ///////
 
   Future<bool> getCategories() async {
