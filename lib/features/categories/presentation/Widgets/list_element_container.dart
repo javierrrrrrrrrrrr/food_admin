@@ -143,6 +143,13 @@ class ListElementContainer extends StatelessWidget {
                               ),
                             )
                           : FadeInImage(
+                              imageErrorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                return Image.asset(
+                                  'assets/image_error.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              },
                               fit: BoxFit.fill,
                               placeholder:
                                   const AssetImage('assets/loading.gif'),

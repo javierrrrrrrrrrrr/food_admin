@@ -25,7 +25,7 @@ class SelectCustomWidget extends StatelessWidget {
     final productProvider = Provider.of<ProductProvider>(context);
 
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
+        padding: EdgeInsets.symmetric(vertical: size.height * 0),
         child: Container(
           height: size.height * 0.07,
           width: size.width * 0.95,

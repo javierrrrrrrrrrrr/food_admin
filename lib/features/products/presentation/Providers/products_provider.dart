@@ -19,6 +19,7 @@ class ProductProvider extends ChangeNotifier {
   //campos del formulario para agregar productos
 
   String? productname;
+  String? productdescription;
   String productofertprice = "";
   String productnominalprice = "";
 
@@ -73,14 +74,17 @@ class ProductProvider extends ChangeNotifier {
     required String nombre,
     required int categoryid,
     required double price,
+    required String description,
+    required int rating,
+    required bool isrecomended,
   }) async {
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse('${apiUrl}products/'));
     request.body = json.encode({
       "name": nombre,
-      "rating": 0,
-      "isRecommended": false,
-      "description": "",
+      "rating": rating,
+      "isRecommended": isrecomended,
+      "description": description,
       "price": price,
       "category": categoryid
     });

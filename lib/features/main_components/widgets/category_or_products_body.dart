@@ -66,8 +66,10 @@ class ListProductsOrCategoryBody extends StatelessWidget {
                   loadingSpinner(context);
                   //setando valores
                   imageProvider.pictureIsSelected = false;
+                  imageProvider.setimage();
                   productProvider.selectedcategory = null;
                   productProvider.rating = null;
+
                   //
                   bool respuesta = await categoryProvider.getCategories();
                   if (respuesta == true) {
