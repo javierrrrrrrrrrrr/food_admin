@@ -9,10 +9,10 @@ class Product extends Equatable {
   bool isRecommended;
   String description;
   int price;
-  String image;
-  Category category;
-  String createdAt;
-  bool isDeleted;
+  String? image;
+  Category? category;
+  String? createdAt;
+  bool? isDeleted;
 
   Product({
     required this.id,
@@ -21,11 +21,36 @@ class Product extends Equatable {
     required this.isRecommended,
     required this.description,
     required this.price,
-    required this.image,
-    required this.category,
-    required this.createdAt,
-    required this.isDeleted,
+    this.image,
+    this.category,
+    this.createdAt,
+    this.isDeleted,
   });
+
+  Product copyWith({
+    int? id,
+    String? name,
+    int? rating,
+    bool? isRecommended,
+    String? description,
+    int? price,
+    String? image,
+    Category? category,
+    String? createdAt,
+    bool? isDeleted,
+  }) =>
+      Product(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        rating: rating ?? this.rating,
+        isRecommended: isRecommended ?? this.isRecommended,
+        description: description ?? this.description,
+        price: price ?? this.price,
+        image: image ?? this.image,
+        category: category ?? this.category,
+        createdAt: createdAt ?? this.createdAt,
+        isDeleted: isDeleted ?? this.isDeleted,
+      );
 
   factory Product.fromMap(Map<String, dynamic> json) => Product(
         id: json["id"],

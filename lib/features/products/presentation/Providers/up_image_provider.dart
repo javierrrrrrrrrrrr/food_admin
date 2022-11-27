@@ -22,6 +22,7 @@ class UPImageProvider extends ChangeNotifier {
 
   //
   setimage() {
+    pictureIsSelected = false;
     image = null;
     notifyListeners();
   }

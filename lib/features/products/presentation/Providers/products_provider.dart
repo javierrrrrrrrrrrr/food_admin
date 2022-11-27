@@ -15,6 +15,7 @@ class ProductProvider extends ChangeNotifier {
   //lista de productos
   List<Product> productsList = [];
   Product? createdpreduct;
+  Product? copyProductselected;
 
   //campos del formulario para agregar productos
 
@@ -29,6 +30,11 @@ class ProductProvider extends ChangeNotifier {
   int? selectedcategoryid;
 
   //metodo para actulizar la categoria en el drop down
+
+  deletedProduct(Product product) async {
+    productsList.remove(product);
+    notifyListeners();
+  }
 
   changecategoryvalue(String value) {
     selectedcategory = value;
@@ -75,14 +81,14 @@ class ProductProvider extends ChangeNotifier {
     required int categoryid,
     required double price,
     required String description,
-    required int rating,
+    //  required int rating,
     required bool isrecomended,
   }) async {
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse('${apiUrl}products/'));
     request.body = json.encode({
       "name": nombre,
-      "rating": rating,
+      // "rating": rating,
       "isRecommended": isrecomended,
       "description": description,
       "price": price,
@@ -108,7 +114,39 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateProduct(Product product) async {}
+  Future<bool> updateProduct(
+      {required Product newproduct, required Product actulyproduct}) async {
+    var headers = {'Content-Type': 'application/json'};
+    var request =
+        http.Request('PUT', Uri.parse('${apiUrl}products/${actulyproduct.id}'));
+    request.body = json.encode({
+      "name": newproduct.name,
+      "rating": newproduct.rating,
+      "isRecommended": newproduct.isRecommended,
+      "description": newproduct.description,
+      "price": newproduct.price,
+      "category": newproduct.category!.id
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var respuesta = await response.stream.bytesToString();
+      // print(respuesta);
+      Map<String, dynamic> decoderesp = json.decode(respuesta);
+      createdpreduct = Product.fromMap(decoderesp);
+      productsList.remove(actulyproduct);
+      productsList.add(createdpreduct!);
+      notifyListeners();
+
+      return true;
+      //  print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+      return false;
+    }
+  }
 
   Future<bool> deleteProduct(Product product) async {
     var request =

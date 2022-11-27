@@ -8,6 +8,7 @@ class CustomField extends StatelessWidget {
     this.paddinvertical,
     this.onChanged,
     this.validator,
+    this.initialvalue,
   }) : super(key: key);
 
   final String hintext;
@@ -15,6 +16,7 @@ class CustomField extends StatelessWidget {
   final double? paddinvertical;
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
+  final String? initialvalue;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class CustomField extends StatelessWidget {
         horizontal: paddinhorizontal ?? size.width * 0.03,
       ),
       child: TextFormField(
+        initialValue: initialvalue ?? "",
         validator: validator,
         onChanged: onChanged,
 

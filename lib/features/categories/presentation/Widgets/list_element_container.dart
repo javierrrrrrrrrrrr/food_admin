@@ -3,10 +3,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:food_admin/features/categories/data/models/category_model.dart';
 import 'package:food_admin/features/categories/presentation/Provider/category_provider.dart';
 import 'package:food_admin/features/products/data/models/product_model.dart';
+import 'package:food_admin/features/products/presentation/pages/add_produt_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constantes/constantes.dart';
 import '../../../products/presentation/Providers/products_provider.dart';
+import '../../../products/presentation/Providers/up_image_provider.dart';
 
 class ListElementContainer extends StatelessWidget {
   const ListElementContainer({
@@ -25,6 +27,7 @@ class ListElementContainer extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final productProvider = Provider.of<ProductProvider>(context);
     final categoryProvider = Provider.of<CategoryProvider>(context);
+    final imageProvider = Provider.of<UPImageProvider>(context);
     return Container(
       height: size.height * 0.1,
       width: size.width,
@@ -111,7 +114,45 @@ class ListElementContainer extends StatelessWidget {
                 autoClose: true,
               ),
               SlidableAction(
-                onPressed: ((context) {}),
+                onPressed: ((context) async {
+                  loadingSpinner(productProvider.scaffoldKey.currentContext!);
+                  imageProvider.setimage();
+                  //imageProvider.pictureIsSelected = false;
+
+                  var respuesta = await categoryProvider.getCategories();
+                  if (respuesta == true) {
+                    //igualando el producto para ver si se hacen cambios
+                    productProvider.copyProductselected = Product(
+                      id: product!.id,
+                      name: product!.name,
+                      rating: product!.rating,
+                      description: product!.description,
+                      price: product!.price,
+                      category: product!.category,
+                      image: product!.image,
+                      isRecommended: product!.isRecommended,
+                      createdAt: product!.createdAt,
+                      isDeleted: product!.isDeleted,
+                    );
+
+                    Navigator.pop(productProvider.scaffoldKey.currentContext!);
+                    Navigator.push(
+                        productProvider.scaffoldKey.currentContext!,
+                        MaterialPageRoute(
+                            builder: (context) => AddProduct(
+                                  producto: product!,
+                                )));
+                  } else {
+                    Navigator.pop(productProvider.scaffoldKey.currentContext!);
+                    ScaffoldMessenger.of(
+                            productProvider.scaffoldKey.currentContext!)
+                        .showSnackBar(
+                      const SnackBar(
+                        content: Text("Error al cargar las categorias"),
+                      ),
+                    );
+                  }
+                }),
                 icon: Icons.edit,
                 label: "Editar",
                 spacing: 1,
@@ -158,7 +199,7 @@ class ListElementContainer extends StatelessWidget {
                               ))
                       :
                       // si es categoria
-                      //ADONYS TIENE QUE ARREEGLAR ESTO
+
                       category!.image == 'no-image.png'
                           ? ClipRRect(
                               borderRadius: BorderRadius.all(
