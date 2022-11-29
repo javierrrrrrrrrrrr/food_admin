@@ -29,16 +29,25 @@ class ProductProvider extends ChangeNotifier {
 
   int? selectedcategoryid;
 
+  //
+  String? productoCategoryNameSelected;
+  //
+
   //metodo para actulizar la categoria en el drop down
 
   deletedProduct(Product product) async {
     productsList.remove(product);
+    productsList
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     notifyListeners();
   }
 
-  changecategoryvalue(String value) {
+  String changecategoryvalue(String value) {
     selectedcategory = value;
+    productoCategoryNameSelected = value;
     notifyListeners();
+
+    return selectedcategory!;
   }
 
   changeratingvalue(int value) {
@@ -52,6 +61,8 @@ class ProductProvider extends ChangeNotifier {
 
   addproducttoList() {
     productsList.add(createdpreduct!);
+    productsList
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     notifyListeners();
   }
 
@@ -67,6 +78,9 @@ class ProductProvider extends ChangeNotifier {
       productsList = (decodedResp['products'] as List)
           .map((e) => Product.fromMap(e))
           .toList();
+      //ordenar alfabeticamente sin tener en cuenta las mayuculas
+      productsList
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
 
       return true;
     } else {
@@ -138,6 +152,8 @@ class ProductProvider extends ChangeNotifier {
       createdpreduct = Product.fromMap(decoderesp);
       productsList.remove(actulyproduct);
       productsList.add(createdpreduct!);
+      productsList
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       notifyListeners();
 
       return true;
@@ -156,6 +172,8 @@ class ProductProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       productsList.remove(product);
+      productsList
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       notifyListeners();
       return true;
     } else {
@@ -173,6 +191,8 @@ class ProductProvider extends ChangeNotifier {
       Map<String, dynamic> decoderesp = json.decode(respuesta);
       createdpreduct = Product.fromMap(decoderesp);
       productsList.add(createdpreduct!);
+      productsList
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       notifyListeners();
       return true;
     } else {

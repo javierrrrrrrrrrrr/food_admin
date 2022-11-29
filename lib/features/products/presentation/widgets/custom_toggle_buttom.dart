@@ -7,7 +7,14 @@ import '../Providers/up_image_provider.dart';
 class CustomToggleButtom extends StatelessWidget {
   const CustomToggleButtom({
     Key? key,
+    this.height,
+    this.width,
+    this.cornerRadius,
   }) : super(key: key);
+
+  final double? height;
+  final double? width;
+  final double? cornerRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +22,10 @@ class CustomToggleButtom extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return imageProvider.image == null
         ? ToggleSwitch(
-            minWidth: size.width * 0.15,
-            minHeight: size.height * 0.06,
+            minWidth: width ?? size.width * 0.15,
+            minHeight: height ?? size.height * 0.06,
             initialLabelIndex: 0,
-            cornerRadius: 20.0,
+            cornerRadius: cornerRadius ?? 20,
             activeFgColor: Colors.white,
             inactiveBgColor: Colors.grey,
             inactiveFgColor: Colors.white,

@@ -54,6 +54,7 @@ class ListProductsOrCategoryBody extends StatelessWidget {
               CustomAddButtom(
                   text: "Agregar Categoria",
                   onPressed: () {
+                    imageProvider.setimage();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -71,9 +71,17 @@ class AddProduct extends StatelessWidget {
                   SizedBox(height: size.height * 0.02),
                   SelectCustomWidget(
                     hinttext: "Seleccione una categoria",
+                    //si el producto es null es que se va a utilizar en crear producto y si no es que se va a utilizar en editar producto
                     value: producto == null
                         ? productProvider.selectedcategory
-                        : producto!.category!.name,
+                        : chechkIfCategoryExist(
+                            categoryProvider.categorylist,
+                            producto!.category!.name,
+                          )
+                            ? productProvider.productoCategoryNameSelected ??
+                                producto!.category!.name
+                            : null,
+
                     onChanged: (value) {
                       productProvider.changecategoryvalue(value!);
                     },
@@ -293,13 +301,19 @@ class AddProduct extends StatelessWidget {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   } else {
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            "Error al modificar el producto"),
-                                      ),
-                                    );
+                                    if (respuesta == true) {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    } else {
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              "Error al modificar el producto"),
+                                        ),
+                                      );
+                                    }
                                   }
                                 }
                               }
@@ -320,6 +334,16 @@ class AddProduct extends StatelessWidget {
       ),
     );
   }
+}
+
+bool chechkIfCategoryExist(List<Category> list, String categoryname) {
+  bool iSexist = false;
+  for (int i = 0; i < list.length; i++) {
+    if (list[i].name == categoryname) {
+      iSexist = true;
+    }
+  }
+  return iSexist;
 }
 
 class CustomTextArea extends StatelessWidget {

@@ -20,6 +20,11 @@ class UPImageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  pictureisselected(bool val) {
+    pictureIsSelected = val;
+    notifyListeners();
+  }
+
   //
   setimage() {
     pictureIsSelected = false;
@@ -29,7 +34,7 @@ class UPImageProvider extends ChangeNotifier {
 
   File convertToFile(XFile xFile) => File(xFile.path);
 
-  Future<void> selectPicture(BuildContext context, bool camara) async {
+  Future<bool> selectPicture(BuildContext context, bool camara) async {
     final picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(
         source: camara ? ImageSource.camera : ImageSource.gallery);
@@ -50,16 +55,21 @@ class UPImageProvider extends ChangeNotifier {
       print("Imagen comprimida${image!.length()}");
 
       pictureIsSelected = true;
-
       notifyListeners();
+      return true;
+    } else {
+      return false;
     }
   }
 
-  Future<bool> uploadImage({required int id}) async {
+  Future<bool> uploadImage({required int id, bool? iscategory}) async {
     //circular progfress indicator
 
     var request = http.MultipartRequest(
-        'PUT', Uri.parse('${apiUrl}uploads/products/$id'));
+        'PUT',
+        Uri.parse(iscategory == true
+            ? '${apiUrl}uploads/categories/$id'
+            : '${apiUrl}uploads/products/$id'));
     request.files.add(await http.MultipartFile.fromPath(
         'archivo', image!.path)); //image es el file que se sube'));
 
